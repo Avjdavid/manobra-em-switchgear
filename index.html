@@ -1,120 +1,30 @@
-<script>
-  const steps = [
-    {
-      title: "1) Preparação inicial",
-      text: [
-        "Garantir que a manobra está autorizada pelo responsável.",
-        "Estar sempre acompanhado por outro técnico autorizado."
-      ]
-    },
-    {
-      title: "2) EPI e ferramentas",
-      text: [
-        "Colocar capacete, óculos, protetor auricular e vestimenta anti-chama.",
-        "Verificar luvas isolantes com teste de estanqueidade/pressão.",
-        "Confirmar ferramentas isoladas em bom estado."
-      ]
-    },
-    {
-      title: "3) Inspeção do equipamento",
-      text: [
-        "Verificar etiquetas e identificação da célula correta.",
-        "Checar que não há danos, ruídos anormais ou sinais de aquecimento.",
-        "Garantir área livre de pessoas e objetos estranhos."
-      ]
-    },
-    {
-      title: "4) Verificar nível de gás SF₆",
-      text: [
-        "Observar visor/manômetro da célula.",
-        "Conferir se está dentro da faixa verde/pressão nominal.",
-        "Se em faixa amarela ou vermelha → não prosseguir, comunicar manutenção."
-      ]
-    },
-    {
-      title: "5.1) Desligar a saída da célula (lado da carga)",
-      text: [
-        "Abrir o interruptor-seccionador de saída.",
-        "Confirmar abertura do interruptor-seccionador.",
-        "Acionar o seccionador de aterramento da saída."
-      ]
-    },
-    {
-      title: "5.2) Desligar o lado ligado ao transformador",
-      text: [
-        "Abrir o disjuntor do transformador (preferencialmente por comando remoto via SCADA/EDP).",
-        "Somente operar localmente em caso de falha do controle remoto.",
-        "Confirmar abertura.",
-        "Fechar o seccionador no centro, parte superior da switchgear.",
-        "Fechar o seccionador de terra localizado entre o disjuntor e o seccionador central.",
-        "Destaque de segurança: o disjuntor do lado do transformador é o mais crítico (risco de arco interno elevado) → sempre dar preferência à operação remota.",
-        "Se houver sistema de intertravamento mecânico ou elétrico, nunca tentar burlar."
-      ]
-    },
-    {
-      title: "5.3) Desligar a entrada (lado da rede)",
-      text: [
-        "Abrir o interruptor-seccionador/disjuntor de entrada.",
-        "Confirmar abertura.",
-        "Acionar o seccionador de aterramento da entrada."
-      ]
-    },
-    {
-      title: "5.4) Confirmar condições de segurança",
-      text: [
-        "Verificar visualmente que saída, transformador e entrada estão abertos e aterrados.",
-        "Garantir que travas e intertravamentos permanecem ativos."
-      ]
-    },
-    {
-      title: "6) Bloqueio e sinalização (LOTO)",
-      text: [
-        "Colocar cadeado e etiqueta pessoal em todos os pontos de bloqueio.",
-        "Registrar no SCADA ou livro de manobras."
-      ]
-    }
-  ];
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Procedimento Seguro: Manobra em Switchgear nas PCS</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen flex flex-col items-center justify-start p-6 pb-24">
 
-  let currentStep = 0;
+  <div class="w-full max-w-2xl bg-white rounded-2xl shadow-lg p-6 flex flex-col items-center">
+    <!-- CAPA -->
+    <div id="cover-screen" class="w-full text-center space-y-6">
+      <h1 class="text-xl sm:text-2xl md:text-3xl font-bold">
+        Procedimento Seguro:<br> Manobra em Switchgear nas PCS
+      </h1>
+      <button id="start-btn"
+        class="px-6 py-3 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700">
+        Iniciar
+      </button>
+    </div>
 
-  function startProcedure() {
-    // Esconde a capa
-    document.getElementById("cover-screen").classList.add("hidden");
-    // Mostra os passos
-    document.getElementById("step-card").classList.remove("hidden");
-    // Mostra a barra de navegação
-    document.getElementById("nav-bar").classList.remove("hidden");
+    <!-- PASSOS -->
+    <div id="step-card" class="hidden w-full text-center space-y-4"></div>
+  </div>
 
-    // Reinicia no primeiro passo
-    currentStep = 0;
-    renderStep();
-  }
-
-  function renderStep() {
-    const step = steps[currentStep];
-    const card = document.getElementById("step-card");
-    card.innerHTML = `
-      <h2 class="text-lg sm:text-xl font-semibold">${step.title}</h2>
-      <ul class="text-gray-700 text-left list-disc list-inside space-y-1 text-sm sm:text-base">
-        ${step.text.map(line => `<li>${line}</li>`).join("")}
-      </ul>
-    `;
-    document.getElementById("prev-btn").disabled = currentStep === 0;
-    document.getElementById("next-btn").textContent =
-      currentStep === steps.length - 1 ? "Concluir" : "Próximo";
-  }
-
-  function nextStep() {
-    if (currentStep < steps.length - 1) {
-      currentStep++;
-      renderStep();
-    }
-  }
-
-  function prevStep() {
-    if (currentStep > 0) {
-      currentStep--;
-      renderStep();
-    }
-  }
-</script>
+  <!-- NAV FIXA -->
+  <div id="nav-bar" class="hidden fixed bottom-0 left-0 w-full bg-white shadow-inner p-4 flex justify-between gap-2">
+    <button id="prev-btn" class="flex-1 px-4 py-2 bg-gray-300 rounded-lg disabled:opacity-50">Anterior</button>
+    <button id="next-btn" class="flex-1 px-4 py-2 bg-bl
