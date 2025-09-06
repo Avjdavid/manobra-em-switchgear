@@ -64,3 +64,114 @@
           "Verificar etiquetas e identificação da célula correta.",
           "Checar que não há danos, ruídos anormais ou sinais de aquecimento.",
           "Garantir área livre de pessoas e objetos estranhos."
+        ]
+      },
+      {
+        title: "4) Verificar nível de gás SF₆",
+        icon: "🛢️",
+        text: [
+          "Observar visor/manômetro da célula.",
+          "Conferir se está dentro da faixa verde/pressão nominal.",
+          "Se em faixa amarela ou vermelha → não prosseguir, comunicar manutenção."
+        ]
+      },
+      {
+        title: "5.1) Desligar a saída da célula (lado da carga)",
+        icon: "🔌",
+        text: [
+          "Abrir o interruptor-seccionador de saída.",
+          "Confirmar abertura do interruptor-seccionador.",
+          "Acionar o seccionador de aterramento da saída."
+        ]
+      },
+      {
+        title: "5.2) Desligar o lado ligado ao transformador",
+        icon: "🔋",
+        text: [
+          "Abrir o disjuntor do transformador (preferencialmente por comando remoto via SCADA/EDP).",
+          "Somente operar localmente em caso de falha do controle remoto.",
+          "Confirmar abertura.",
+          "Fechar o seccionador no centro, parte superior da switchgear.",
+          "Fechar o seccionador de terra localizado entre o disjuntor e o seccionador central.",
+          "Destaque de segurança: o disjuntor do lado do transformador é o mais crítico (risco de arco interno elevado) → sempre dar preferência à operação remota.",
+          "Se houver sistema de intertravamento mecânico ou elétrico, nunca tentar burlar."
+        ]
+      },
+      {
+        title: "5.3) Desligar a entrada (lado da rede)",
+        icon: "🔒",
+        text: [
+          "Abrir o interruptor-seccionador/disjuntor de entrada.",
+          "Confirmar abertura.",
+          "Acionar o seccionador de aterramento da entrada."
+        ]
+      },
+      {
+        title: "5.4) Confirmar condições de segurança",
+        icon: "✅",
+        text: [
+          "Verificar visualmente que saída, transformador e entrada estão abertos e aterrados.",
+          "Garantir que travas e intertravamentos permanecem ativos."
+        ]
+      },
+      {
+        title: "6) Bloqueio e sinalização (LOTO)",
+        icon: "🔐",
+        text: [
+          "Colocar cadeado e etiqueta pessoal em todos os pontos de bloqueio.",
+          "Registrar no SCADA ou livro de manobras."
+        ]
+      }
+    ];
+
+    let currentStep = 0;
+
+    function renderStep() {
+      const step = steps[currentStep];
+      const card = document.getElementById("step-card");
+
+      card.classList.remove("fade-enter-active");
+      void card.offsetWidth; // força reflow para animação
+      card.classList.add("fade-enter");
+
+      card.innerHTML = `
+        <div class="text-5xl">${step.icon}</div>
+        <h2 class="text-lg sm:text-xl font-semibold text-gray-800">${step.title}</h2>
+        <ul class="text-gray-700 text-left list-disc list-inside space-y-1 text-sm sm:text-base">
+          ${step.text.map(line => `<li>${line}</li>`).join("")}
+        </ul>
+        <p class="text-gray-500 text-sm">Passo ${currentStep + 1} de ${steps.length}</p>
+      `;
+
+      setTimeout(() => {
+        card.classList.add("fade-enter-active");
+      }, 10);
+
+      document.getElementById("prev-btn").disabled = currentStep === 0;
+      document.getElementById("next-btn").textContent =
+        currentStep === steps.length - 1 ? "Concluir" : "Próximo ➡";
+
+      // Atualiza barra de progresso
+      const progress = ((currentStep + 1) / steps.length) * 100;
+      document.getElementById("progress-bar").style.width = progress + "%";
+    }
+
+    function nextStep() {
+      if (currentStep < steps.length - 1) {
+        currentStep++;
+        renderStep();
+      }
+    }
+
+    function prevStep() {
+      if (currentStep > 0) {
+        currentStep--;
+        renderStep();
+      }
+    }
+
+    renderStep();
+  </script>
+
+</body>
+</html>
