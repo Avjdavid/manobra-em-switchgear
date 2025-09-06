@@ -5,36 +5,23 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Procedimento Seguro: Manobra em Switchgear</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    .fade-enter { opacity: 0; transform: translateY(10px); }
-    .fade-enter-active { opacity: 1; transform: translateY(0); transition: opacity 0.4s, transform 0.4s; }
-  </style>
 </head>
-<body class="bg-gradient-to-r from-gray-100 to-gray-200 min-h-screen flex items-center justify-center p-6">
+<body class="bg-gray-100 min-h-screen flex items-center justify-center p-6">
 
-  <div class="w-full max-w-2xl bg-white rounded-2xl shadow-2xl p-6 flex flex-col items-center relative">
-    <h1 class="text-lg sm:text-2xl font-bold mb-4 text-center text-gray-800">
+  <div class="w-full max-w-2xl bg-white rounded-2xl shadow-lg p-6 flex flex-col items-center">
+    <h1 class="text-lg sm:text-xl md:text-2xl font-bold mb-6 text-center">
       Procedimento Seguro: Manobra em Switchgear
     </h1>
 
-    <!-- Barra de progresso -->
-    <div class="w-full bg-gray-200 rounded-full h-2 mb-6">
-      <div id="progress-bar" class="bg-blue-500 h-2 rounded-full transition-all duration-300"></div>
-    </div>
-
     <!-- Card dinâmico -->
-    <div id="step-card" class="w-full text-center space-y-4 fade-enter"></div>
+    <div id="step-card" class="w-full text-center space-y-4"></div>
 
     <!-- Navegação -->
     <div class="flex justify-between w-full mt-6 gap-2">
       <button id="prev-btn" onclick="prevStep()" 
-        class="flex-1 px-4 py-2 bg-gray-300 text-gray-800 font-semibold rounded-lg disabled:opacity-50 hover:bg-gray-400 transition">
-        ⬅ Anterior
-      </button>
+        class="flex-1 px-4 py-2 bg-gray-300 rounded-lg disabled:opacity-50">Anterior</button>
       <button id="next-btn" onclick="nextStep()" 
-        class="flex-1 px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition">
-        Próximo ➡
-      </button>
+        class="flex-1 px-4 py-2 bg-blue-500 text-white rounded-lg">Próximo</button>
     </div>
   </div>
 
@@ -42,7 +29,6 @@
     const steps = [
       {
         title: "1) Preparação inicial",
-        icon: "👷‍♂️",
         text: [
           "Garantir que a manobra está autorizada pelo responsável.",
           "Estar sempre acompanhado por outro técnico autorizado."
@@ -50,7 +36,6 @@
       },
       {
         title: "2) EPI e ferramentas",
-        icon: "🧤",
         text: [
           "Colocar capacete, óculos, protetor auricular e vestimenta anti-chama.",
           "Verificar luvas isolantes com teste de estanqueidade/pressão.",
@@ -59,7 +44,6 @@
       },
       {
         title: "3) Inspeção do equipamento",
-        icon: "⚡",
         text: [
           "Verificar etiquetas e identificação da célula correta.",
           "Checar que não há danos, ruídos anormais ou sinais de aquecimento.",
@@ -68,7 +52,6 @@
       },
       {
         title: "4) Verificar nível de gás SF₆",
-        icon: "🛢️",
         text: [
           "Observar visor/manômetro da célula.",
           "Conferir se está dentro da faixa verde/pressão nominal.",
@@ -77,7 +60,6 @@
       },
       {
         title: "5.1) Desligar a saída da célula (lado da carga)",
-        icon: "🔌",
         text: [
           "Abrir o interruptor-seccionador de saída.",
           "Confirmar abertura do interruptor-seccionador.",
@@ -86,7 +68,6 @@
       },
       {
         title: "5.2) Desligar o lado ligado ao transformador",
-        icon: "🔋",
         text: [
           "Abrir o disjuntor do transformador (preferencialmente por comando remoto via SCADA/EDP).",
           "Somente operar localmente em caso de falha do controle remoto.",
@@ -99,7 +80,6 @@
       },
       {
         title: "5.3) Desligar a entrada (lado da rede)",
-        icon: "🔒",
         text: [
           "Abrir o interruptor-seccionador/disjuntor de entrada.",
           "Confirmar abertura.",
@@ -108,7 +88,6 @@
       },
       {
         title: "5.4) Confirmar condições de segurança",
-        icon: "✅",
         text: [
           "Verificar visualmente que saída, transformador e entrada estão abertos e aterrados.",
           "Garantir que travas e intertravamentos permanecem ativos."
@@ -116,7 +95,6 @@
       },
       {
         title: "6) Bloqueio e sinalização (LOTO)",
-        icon: "🔐",
         text: [
           "Colocar cadeado e etiqueta pessoal em todos os pontos de bloqueio.",
           "Registrar no SCADA ou livro de manobras."
@@ -129,31 +107,15 @@
     function renderStep() {
       const step = steps[currentStep];
       const card = document.getElementById("step-card");
-
-      card.classList.remove("fade-enter-active");
-      void card.offsetWidth; // força reflow para animação
-      card.classList.add("fade-enter");
-
       card.innerHTML = `
-        <div class="text-5xl">${step.icon}</div>
-        <h2 class="text-lg sm:text-xl font-semibold text-gray-800">${step.title}</h2>
+        <h2 class="text-lg sm:text-xl font-semibold">${step.title}</h2>
         <ul class="text-gray-700 text-left list-disc list-inside space-y-1 text-sm sm:text-base">
           ${step.text.map(line => `<li>${line}</li>`).join("")}
         </ul>
-        <p class="text-gray-500 text-sm">Passo ${currentStep + 1} de ${steps.length}</p>
       `;
-
-      setTimeout(() => {
-        card.classList.add("fade-enter-active");
-      }, 10);
-
       document.getElementById("prev-btn").disabled = currentStep === 0;
       document.getElementById("next-btn").textContent =
-        currentStep === steps.length - 1 ? "Concluir" : "Próximo ➡";
-
-      // Atualiza barra de progresso
-      const progress = ((currentStep + 1) / steps.length) * 100;
-      document.getElementById("progress-bar").style.width = progress + "%";
+        currentStep === steps.length - 1 ? "Concluir" : "Próximo";
     }
 
     function nextStep() {
@@ -170,6 +132,7 @@
       }
     }
 
+    // Inicializa o primeiro passo
     renderStep();
   </script>
 
