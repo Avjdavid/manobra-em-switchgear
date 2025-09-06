@@ -9,13 +9,16 @@
 <body class="bg-gray-100 min-h-screen flex flex-col items-center justify-start p-6 pb-24">
 
   <div class="w-full max-w-2xl bg-white rounded-2xl shadow-lg p-6 flex flex-col items-center">
-    <!-- TÍTULO FIXO NO TOPO -->
-    <h1 class="text-xl sm:text-2xl md:text-3xl font-bold mb-6 text-center">
-      Procedimento Seguro:<br> Manobra em Switchgear nas PCS
-    </h1>
+    <!-- CAPA: PRIMEIRA TELA -->
+    <div id="cover-screen" class="w-full text-center space-y-6">
+      <h1 class="text-xl sm:text-2xl md:text-3xl font-bold">
+        Procedimento Seguro:<br> Manobra em Switchgear nas PCS
+      </h1>
+      <p class="text-gray-600">Clique em próximo para iniciar</p>
+    </div>
 
     <!-- PASSOS -->
-    <div id="step-card" class="w-full text-center space-y-4"></div>
+    <div id="step-card" class="hidden w-full text-center space-y-4"></div>
   </div>
 
   <!-- NAV FIXA -->
@@ -29,14 +32,14 @@
     const steps = [
       { title: "1) Preparação inicial",
         text: [
-          "Garantir que a manobra está autorizada pela EDP.",
-          "Estar sempre acompanhado por outro técnico."
+          "Garantir que a manobra está autorizada pelo responsável.",
+          "Estar sempre acompanhado por outro técnico autorizado."
         ]},
       { title: "2) EPI e ferramentas",
         text: [
           "Colocar capacete, óculos, protetor auricular e vestimenta anti-chama.",
-          "Verificar luvas isolantes com teste visual e de pressão.",
-          "Confirmar que todos equipamentos estão em bom estado."
+          "Verificar luvas isolantes com teste de estanqueidade/pressão.",
+          "Confirmar ferramentas isoladas em bom estado."
         ]},
       { title: "3) Inspeção do equipamento",
         text: [
@@ -48,7 +51,7 @@
         text: [
           "Observar visor/manômetro da célula.",
           "Conferir se está dentro da faixa verde/pressão nominal.",
-          "Se em faixa amarela ou vermelha → não prosseguir, comunicar supervisor e EDP."
+          "Se em faixa amarela ou vermelha → não prosseguir, comunicar manutenção."
         ]},
       { title: "5.1) Desligar a saída da célula (lado da carga)",
         text: [
@@ -84,50 +87,60 @@
         ]}
     ];
 
-    // ---- ESTADO E ELEMENTOS ----
-    let currentStep = 0;
+    // ---- ESTADO ----
+    let currentStep = -1; // -1 = capa
+    const cover = document.getElementById("cover-screen");
     const stepCard = document.getElementById("step-card");
     const prevBtn = document.getElementById("prev-btn");
     const nextBtn = document.getElementById("next-btn");
 
-    // ---- FUNÇÕES ----
-    function renderStep() {
-      const step = steps[currentStep];
-      stepCard.innerHTML = `
-        <h2 class="text-lg sm:text-xl font-semibold">${step.title}</h2>
-        <ul class="text-gray-700 text-left list-disc list-inside space-y-1 text-sm sm:text-base">
-          ${step.text.map(line => `<li>${line}</li>`).join("")}
-        </ul>`;
-      prevBtn.disabled = currentStep === 0;
-      nextBtn.textContent = currentStep === steps.length - 1 ? "Concluir" : "Próximo";
+    function renderScreen() {
+      if (currentStep === -1) {
+        // Mostrar capa
+        cover.classList.remove("hidden");
+        stepCard.classList.add("hidden");
+        prevBtn.disabled = true;
+        nextBtn.textContent = "Iniciar";
+      } else {
+        // Mostrar passo
+        cover.classList.add("hidden");
+        stepCard.classList.remove("hidden");
+        const step = steps[currentStep];
+        stepCard.innerHTML = `
+          <h2 class="text-lg sm:text-xl font-semibold">${step.title}</h2>
+          <ul class="text-gray-700 text-left list-disc list-inside space-y-1 text-sm sm:text-base">
+            ${step.text.map(line => `<li>${line}</li>`).join("")}
+          </ul>`;
+        prevBtn.disabled = currentStep === 0;
+        nextBtn.textContent = currentStep === steps.length - 1 ? "Concluir" : "Próximo";
+      }
     }
 
     function nextStep() {
       if (currentStep < steps.length - 1) {
         currentStep++;
-        renderStep();
+        renderScreen();
       }
     }
 
     function prevStep() {
-      if (currentStep > 0) {
+      if (currentStep > -1) {
         currentStep--;
-        renderStep();
+        renderScreen();
       }
     }
 
-    // ---- EVENTOS ----
+    // Eventos
     prevBtn.addEventListener("click", prevStep);
     nextBtn.addEventListener("click", nextStep);
 
-    // Atalhos de teclado (PC)
     document.addEventListener("keydown", (e) => {
       if (e.key === "ArrowRight") nextStep();
       if (e.key === "ArrowLeft") prevStep();
     });
 
-    // Renderiza automaticamente o passo 1
-    renderStep();
+    // Render inicial (capa)
+    renderScreen();
   </script>
 </body>
 </html>
