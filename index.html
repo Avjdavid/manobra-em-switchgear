@@ -59,60 +59,18 @@
         ]
       },
       {
-        title: "5) Sequência de desligamento e aterramento",
+        title: "5.1) Desligar a saída da célula (lado da carga)",
         text: [
-          "Primeiro desligar a saída da célula (alimentação da carga) → abrir seccionador/disjuntor correspondente e aterrar.",
-          "Depois desligar o lado ligado ao transformador usando o disjuntor dedicado.",
-          "Sempre que possível, operar remotamente através do painel de comando/SCADA.",
-          "Após a abertura, acionar o seccionador de aterramento.",
-          "Por último desligar a entrada (alimentação da rede) e efetuar o aterramento.",
-          "Confirmar visualmente cada posição de aberto + aterrado antes de prosseguir.",
-          "Destaque de segurança: o disjuntor do lado do transformador é o mais crítico (risco de arco interno elevado) → sempre dar preferência à operação remota.",
-          "Se houver sistema de intertravamento mecânico ou elétrico, nunca tentar burlar."
+          "Abrir o interruptor-seccionador de saída.",
+          "Confirmar abertura do interruptor-seccionador.",
+          "Acionar o seccionador de aterramento da saída."
         ]
       },
       {
-        title: "6) Bloqueio e sinalização (LOTO)",
+        title: "5.2) Desligar o lado ligado ao transformador",
         text: [
-          "Colocar cadeado e etiqueta pessoal em todos os pontos de bloqueio.",
-          "Registrar no SCADA ou livro de manobras."
-        ]
-      }
-    ];
-
-    let currentStep = 0;
-
-    function renderStep() {
-      const step = steps[currentStep];
-      const card = document.getElementById("step-card");
-      card.innerHTML = `
-        <h2 class="text-lg sm:text-xl font-semibold">${step.title}</h2>
-        <ul class="text-gray-700 text-left list-disc list-inside space-y-1 text-sm sm:text-base">
-          ${step.text.map(line => `<li>${line}</li>`).join("")}
-        </ul>
-      `;
-      document.getElementById("prev-btn").disabled = currentStep === 0;
-      document.getElementById("next-btn").textContent =
-        currentStep === steps.length - 1 ? "Concluir" : "Próximo";
-    }
-
-    function nextStep() {
-      if (currentStep < steps.length - 1) {
-        currentStep++;
-        renderStep();
-      }
-    }
-
-    function prevStep() {
-      if (currentStep > 0) {
-        currentStep--;
-        renderStep();
-      }
-    }
-
-    // Inicializa o primeiro passo
-    renderStep();
-  </script>
-
-</body>
-</html>
+          "Abrir o disjuntor do transformador (preferencialmente por comando remoto via SCADA/EDP).",
+          "Somente operar localmente em caso de falha do controle remoto.",
+          "Confirmar abertura.",
+          "Fechar o seccionador no centro, parte superior da switchgear.",
+          "Fechar o seccionador de ter
